@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from telegram_bot.views import telegram_webhook
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
     path('favorites/', include('favorites.urls')),
+    path('telegram/webhook/', telegram_webhook, name='telegram_webhook'),
 ]
 
 if settings.DEBUG:
