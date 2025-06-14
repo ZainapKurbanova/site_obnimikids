@@ -16,6 +16,7 @@ from telegram.ext import (
     ContextTypes,
     filters,
 )
+
 from telegram_bot.models import TelegramUser
 from orders.models import Order
 
@@ -188,22 +189,21 @@ def media_handler(update: Update, context: CallbackContext):
             context.bot.forward_message(chat_id=admin_id, from_chat_id=chat_id, message_id=message.message_id)
             context.bot.send_message(chat_id=admin_id, text=f"🛉 Чек от клиента (chat_id: {chat_id})")
 
-# Django команда
 class Command(BaseCommand):
     help = 'Запуск Telegram-бота'
 
     def handle(self, *args, **kwargs):
+        TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
         if not TELEGRAM_BOT_TOKEN:
             self.stdout.write("❌ TELEGRAM_BOT_TOKEN не найден в переменных окружения.")
             return
-        updater = Updater(token=TELEGRAM_BOT_TOKEN, use_context=True)
-        dp = updater.dispatcher
 
-        dp.add_handler(CommandHandler("start", start_handler))
-        dp.add_handler(CallbackQueryHandler(callback_query_handler))
-        dp.add_handler(MessageHandler(Filters.text & ~Filters.command, text_handler))
-        dp.add_handler(MessageHandler(Filters.photo | Filters.document, media_handler))
+        application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+
+        application.add_handler(CommandHandler("start", start_handler))
+        application.add_handler(CallbackQueryHandler(callback_query_handler))
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_handler))
+        application.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, media_handler))
 
         self.stdout.write("✅ Telegram-бот запущен…")
-        updater.start_polling()
-        updater.idle()
+        application.run_polling()
