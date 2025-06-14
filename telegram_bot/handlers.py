@@ -1,5 +1,5 @@
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler, filters
-from telegram_bot.views_logic import (
+from telegram_bot.views import (
     start_handler,
     callback_query_handler,
     text_handler,
