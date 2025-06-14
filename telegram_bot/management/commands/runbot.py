@@ -19,6 +19,7 @@ from telegram.ext import (
 
 from telegram_bot.models import TelegramUser
 from orders.models import Order
+from asgiref.sync import sync_to_async
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,12 +32,9 @@ def main_menu():
         [KeyboardButton("❓ Задать вопрос"), KeyboardButton("📦 Статус заказа")]
     ], resize_keyboard=True)
 
-async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
-    chat_id = update.effective_chat.id
-    start_payload = context.args[0] if context.args else ''
-
-    TelegramUser.objects.get_or_create(
+@sync_to_async
+def get_or_create_telegram_user(chat_id, user):
+    return TelegramUser.objects.get_or_create(
         chat_id=chat_id,
         defaults={
             "first_name": user.first_name,
@@ -45,12 +43,19 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         }
     )
 
+async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+    chat_id = update.effective_chat.id
+    start_payload = context.args[0] if context.args else ''
+
+    await get_or_create_telegram_user(chat_id, user)
+
     if start_payload.startswith("order_"):
         order_id = start_payload.split("_")[1]
         try:
-            order = Order.objects.get(id=order_id)
+            order = await sync_to_async(Order.objects.get)(id=order_id)
             order.tg_chat_id = chat_id
-            order.save(update_fields=['tg_chat_id'])
+            await sync_to_async(order.save)(update_fields=['tg_chat_id'])
 
             keyboard = InlineKeyboardMarkup([
                 [InlineKeyboardButton("Да, оплатить", callback_data=f"pay_{order_id}"),
@@ -79,9 +84,9 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def handle_pay_request(context, chat_id, order_id):
     try:
-        order = Order.objects.get(id=order_id)
+        order = await sync_to_async(Order.objects.get)(id=order_id)
         order.status = 'pending'
-        order.save(update_fields=['status'])
+        await sync_to_async(order.save)(update_fields=['status'])
 
         for admin_id in ADMINS:
             keyboard = InlineKeyboardMarkup([
@@ -123,9 +128,9 @@ async def callback_query_handler(update: Update, context: ContextTypes.DEFAULT_T
     elif data.startswith("mark_paid_"):
         client_chat_id = data.split("_")[-1]
         try:
-            order = Order.objects.filter(tg_chat_id=client_chat_id).latest('created_at')
+            order = await sync_to_async(Order.objects.filter(tg_chat_id=client_chat_id).latest)('created_at')
             order.status = 'paid'
-            order.save(update_fields=['status'])
+            await sync_to_async(order.save)(update_fields=['status'])
             await context.bot.send_message(chat_id=client_chat_id, text="✅ Спасибо за оплату! Мы скоро отправим ваш заказ.")
             await context.bot.send_message(chat_id=chat_id, text="Статус заказа обновлён как 'Оплачено'.")
         except Order.DoesNotExist:
