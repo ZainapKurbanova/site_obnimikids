@@ -2,12 +2,19 @@ import logging
 import os
 from django.core.management.base import BaseCommand
 from telegram import (
-    Update, InlineKeyboardButton, InlineKeyboardMarkup,
-    KeyboardButton, ReplyKeyboardMarkup
+    Update,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
 )
 from telegram.ext import (
-    Updater, CommandHandler, CallbackContext,
-    MessageHandler, Filters, CallbackQueryHandler
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    ContextTypes,
+    filters,
 )
 from telegram_bot.models import TelegramUser
 from orders.models import Order
