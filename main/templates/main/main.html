@@ -1,0 +1,39 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}OBNIMI Kids - Главная{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="content">
+        <header>
+            <div class="logo">
+                <img src="{% static 'main/images/girls.jpg' %}" alt="OBNIMI Kids">
+            </div>
+        </header>
+
+        <div class="intro">
+            Наш бренд родился из большой любви и желания окружить каждого малыша заботой, красотой и комфортом ♡
+        </div>
+
+        <section class="products">
+            <h2>Стильные образы с одеждой нашего бренда</h2>
+            <div class="product-list">
+                <div class="product">
+                    <img src="{% static 'main/images/obraz1.png' %}" alt="Комбинезон">
+                    <p>Образ с базовым костюмом из футера с велюр эффектом</p>
+                </div>
+                <div class="product">
+                    <img src="{% static 'main/images/obraz2.png' %}" alt="Комбинезон">
+                    <p>Образ с костюмом из умягченного льна</p>
+                </div>
+                <div class="product">
+                    <img src="{% static 'main/images/obraz3.png' %}" alt="Комбинезон">
+                    <p>Образ с платьем из умягченного льна с крэш эффектом</p>
+                </div>
+            </div>
+            <a href="{% url 'catalog' %}" class="catalog-btn">Перейти в каталог <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></a>
+        </section>
+    </div>
+{% endblock %}

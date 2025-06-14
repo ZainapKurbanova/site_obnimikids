@@ -1,0 +1,479 @@
+.profile-section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    background: linear-gradient(180deg, #f8f8f8 0%, #f0f4f7 50%, #e6f3e6 100%); /* Такой же градиент, как в auth-section */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 480px);
+}
+
+/* Убираем анимацию фона */
+.profile-section::before {
+    display: none;
+}
+
+.profile-container {
+    width: 500px; /* Такая же ширина, как в auth-container */
+    margin: 0 auto;
+    background: #ffffff; /* Чисто белый фон */
+    padding: 40px;
+    border-radius: 15px; /* Закругление как в auth-container */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(120, 134, 107, 0.05); /* Тень как в auth-container */
+    border: 1px solid rgba(120, 134, 107, 0.1); /* Граница как в auth-container */
+    animation: fadeIn 0.8s ease-in-out; /* Такая же анимация, как в auth-container */
+}
+
+/* Убираем стеклянный эффект */
+.glass-effect {
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.profile-container h2 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 28px; /* Как в auth-container */
+    font-weight: 600; /* Как в auth-container */
+    color: #444; /* Как в auth-container */
+    margin-bottom: 25px; /* Как в auth-container */
+    text-transform: uppercase; /* Как в auth-container */
+    letter-spacing: 1.5px; /* Как в auth-container */
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(120, 134, 107, 0.1); /* Как в auth-container */
+}
+
+.profile-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    background: #78866b;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.profile-container h2:hover::after {
+    width: 70px;
+}
+
+.profile-info h3 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    text-align: left; /* Как в auth-form */
+    position: relative;
+}
+
+.form-group label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666; /* Как в auth-form */
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.form-group input {
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    padding: 12px 15px 12px 15px; /* Убираем отступ для иконки, так как её нет */
+    font-size: 14px;
+    border: 1px solid #ddd; /* Как в auth-form */
+    border-radius: 8px; /* Как в auth-form */
+    box-sizing: border-box;
+    background: #fafafa; /* Как в auth-form */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+
+    border-color: #78866b; /* Как в auth-form */
+    box-shadow: 0 0 10px rgba(120, 134, 107, 0.2); /* Как в auth-form */
+    outline: none;
+}
+
+.form-group .error {
+    color: #d9534f;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Стили для радиокнопок пола */
+.gender-selector {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.gender-selector ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.gender-selector li {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.gender-selector input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.gender-selector label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666; /* Как в auth-form */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    padding-left: 26px;
+    transition: color 0.3s ease;
+    pointer-events: auto;
+}
+
+.gender-selector label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #78866b;
+    border-radius: 50%;
+    background: #fafafa; /* Как в auth-form */
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.gender-selector input[type="radio"]:checked + label::before {
+    border-color: #5c6d50;
+    background: #5c6d50;
+    box-shadow: inset 0 0 0 3px #ffffff; /* Белый внутренний круг */
+}
+
+.gender-selector input[type="radio"]:checked + label {
+    color: #5c6d50;
+    font-weight: 600;
+}
+
+.gender-selector label:hover::before {
+    border-color: #5c6d50;
+}
+
+.profile-btn {
+    padding: 14px;
+    background: linear-gradient(45deg, #78866b, #5c6d50); /* Как в auth-btn */
+    color: #fff;
+    border: none;
+    border-radius: 8px; /* Как в auth-btn */
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: width 0.4s ease;
+}
+
+.profile-btn:hover {
+    background: linear-gradient(45deg, #5c6d50, #4a5a40); /* Как в auth-btn */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(120, 134, 107, 0.3);
+}
+
+.profile-btn:hover::before {
+    width: 100%;
+}
+
+.profile-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666; /* Как в auth-link */
+    margin-top: 15px;
+    text-align: center;
+}
+
+.profile-link a {
+    color: #78866b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.profile-link a:hover {
+    color: #5c6d50;
+    text-decoration: underline;
+}
+
+/* Стили для вкладок */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #666; /* Как в auth-link */
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.tab-button.active {
+    color: #5c6d50;
+    border-bottom: 2px solid #5c6d50; /* Убираем градиент текста */
+}
+
+.tab-button.active::after {
+    display: none; /* Убираем градиентную линию */
+}
+
+.tab-button:hover {
+    color: #5c6d50;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Стили для списка заказов */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-item {
+    background: #ffffff; /* Чисто белый фон */
+    border-radius: 8px; /* Как в auth-form */
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.order-item:hover {
+    transform: translateY(-2px);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.order-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.order-status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.order-status.pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.order-status.shipped {
+    background: #e0f7fa;
+    color: #0288d1;
+}
+
+.order-status.delivered {
+    background: #e6f3e6;
+    color: #5c6d50;
+}
+
+.order-dates {
+    display: flex;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.order-items {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.order-item-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.no-orders {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .profile-section {
+        padding: 50px 10px;
+        min-height: calc(100vh - 400px);
+    }
+
+    .profile-container {
+        padding: 25px;
+        max-width: 100%;
+    }
+
+    .profile-container h2 {
+        font-size: 22px;
+    }
+
+    .profile-info h3 {
+        font-size: 18px;
+    }
+
+    .profile-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .form-group input {
+        padding: 10px 15px;
+    }
+
+    .gender-selector {
+        gap: 15px;
+    }
+
+    .gender-selector label::before {
+        width: 14px;
+        height: 14px;
+    }
+
+    .gender-selector label {
+        padding-left: 24px;
+    }
+
+    .gender-selector input[type="radio"] {
+        width: 14px;
+        height: 14px;
+    }
+
+    .tab-button {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+
+    .order-item-image {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.autocomplete-wrapper {
+    position: relative;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff; /* Чисто белый фон */
+    border-radius: 8px; /* Как в auth-form */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(120, 134, 107, 0.2);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #333;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active {
+    background: #e6f3e6;
+    color: #5c6d50;
+}

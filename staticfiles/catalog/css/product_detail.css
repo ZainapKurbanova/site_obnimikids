@@ -1,0 +1,570 @@
+.product-detail-section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: linear-gradient(180deg, #f8f8f8 0%, #f0f4f7 100%);
+    min-height: calc(100vh - 480px);
+}
+
+.product-detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.product-detail-grid {
+    display: flex;
+    gap: 40px;
+}
+
+.product-image-container {
+    flex: 1;
+    text-align: center;
+}
+
+.product-detail-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.product-info h2 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price {
+    font-family: 'Raleway', sans-serif;
+    font-size: 22px;
+    color: #5c6d50;
+    font-weight: 500;
+}
+
+.old-price {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.add-to-cart-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.size-selector p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.size-buttons input {
+    display: none;
+}
+
+.size-btn {
+    padding: 8px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.size-buttons input:checked + .size-btn {
+    background: #78866b;
+    color: #fff;
+    border-color: #78866b;
+}
+
+.size-btn:hover {
+    background: #e8e8e8;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-selector p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quantity-btn {
+    padding: 5px 10px;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+.color-selector p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.color-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-buttons input {
+    display: none;
+}
+
+.color-btn {
+    padding: 8px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.color-buttons input:checked + .color-btn {
+    background: #78866b;
+    color: #fff;
+    border-color: #78866b;
+}
+
+.color-btn:hover {
+    background: #e8e8e8;
+}
+
+.quantity-btn:hover {
+    background: #e8e8e8;
+}
+
+.quantity-controls input {
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fafafa;
+}
+
+.add-to-cart-btn {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #78866b, #5c6d50);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+}
+
+.add-to-cart-btn:hover {
+    background: linear-gradient(45deg, #5c6d50, #4a5a40);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(120, 134, 107, 0.3);
+}
+
+.more-details-btn {
+    padding: 12px 20px;
+    background: none;
+    border: 1px solid #78866b;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #78866b;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.more-details-btn:hover {
+    background: #78866b;
+    color: #fff;
+}
+
+.details-content {
+    display: none;
+    margin-top: 20px;
+    text-align: justify; /* Выравнивание по ширине, как в Word */
+}
+
+.details-content p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.go-to-cart-btn {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #5c6d50, #4a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+}
+
+.go-to-cart-btn:hover {
+    background: linear-gradient(45deg, #4a5a40, #3a4830);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(120, 134, 107, 0.3);
+}
+.favorite-btn {
+    padding: 10px 20px;
+    background: none;
+    border: 1px solid #78866b;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #78866b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.favorite-btn:hover {
+    background: #78866b;
+    color: #fff;
+}
+
+.favorite-btn.favorited {
+    background: #5c6d50;
+    color: #fff;
+    border-color: #5c6d50;
+}
+
+.favorite-btn.favorited:hover {
+    background: #4a5a40;
+    border-color: #4a5a40;
+}
+
+.favorite-btn i {
+    font-size: 16px;
+}
+@media (max-width: 768px) {
+    .product-detail-section {
+        padding: 50px 10px;
+    }
+
+    .product-detail-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .product-detail-image {
+        max-width: 100%;
+    }
+
+    .product-info h2 {
+        font-size: 20px;
+    }
+
+    .price {
+        font-size: 18px;
+    }
+
+    .old-price {
+        font-size: 16px;
+    }
+}
+/* Секция отзывов */
+.reviews-section {
+    margin-top: 40px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.reviews-section h3 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.review {
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.review:last-child {
+    border-bottom: none;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.review-user {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5c6d50;
+}
+
+.review-rating {
+    display: flex;
+    gap: 3px;
+}
+
+.review-rating i {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.review-rating i.filled {
+    color: #f4c430; /* Золотистый цвет для звёзд */
+}
+
+.review-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #999;
+}
+
+.review-comment {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.no-reviews {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+}
+
+/* Форма отзыва */
+.review-form {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.review-form h4 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.rating-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.rating-selector p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+}
+
+.stars {
+    display: flex;
+    gap: 5px;
+    direction: rtl;
+}
+
+.stars input {
+    display: none;
+}
+
+.stars label {
+    cursor: pointer;
+    font-size: 20px;
+    color: #ddd;
+    transition: color 0.3s ease;
+}
+
+.stars label:hover,
+.stars label:hover ~ label,
+.stars input:checked ~ label {
+    color: #f4c430;
+}
+
+.comment-field {
+    margin-bottom: 15px;
+}
+
+.comment-field textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #444;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.comment-field textarea:focus {
+    outline: none;
+    border-color: #78866b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.submit-review-btn {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #78866b, #5c6d50);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-review-btn:hover {
+    background: linear-gradient(45deg, #5c6d50, #4a5a40);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(120, 134, 107, 0.2);
+}
+
+.review-message {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Средний рейтинг */
+.rating-container {
+    margin-bottom: 10px;
+}
+
+.average-rating {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #5c6d50;
+}
+
+.average-rating i {
+    color: #f4c430;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .reviews-section {
+        padding: 15px;
+    }
+
+    .reviews-section h3 {
+        font-size: 18px;
+    }
+
+    .review-form {
+        padding: 15px;
+    }
+
+    .review-form h4 {
+        font-size: 16px;
+    }
+
+    .stars label {
+        font-size: 18px;
+    }
+
+    .comment-field textarea {
+        min-height: 80px;
+    }
+
+    .submit-review-btn {
+        font-size: 13px;
+        padding: 8px 15px;
+    }
+}

@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'orders/css/order_success.css' %}">
+{% endblock %}
+{% block content %}
+  <div class="order-success-wrapper">
+    <div class="order-success-card">
+      <h2>Ваш заказ №{{ order_id }} успешно создан!</h2>
+      <p>
+        Чтобы <strong>оплатить</strong> и <strong>получать уведомления</strong> о статусе, перейдите в наш Telegram-бот:
+      </p>
+      <a href="https://t.me/ObnimikidsBot?start=order_{{ order_id }}" target="_blank" class="telegram-btn">
+        Перейти в Telegram-бот
+      </a>
+      <p class="small-note">Ждём вас в чате бота для оплаты и вопросов</p>
+      <a href="{% url 'profile' %}" class="profile-link">Вернуться в личный кабинет</a>
+    </div>
+  </div>
+{% endblock %}

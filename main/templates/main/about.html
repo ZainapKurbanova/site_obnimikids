@@ -1,0 +1,65 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}OBNIMI Kids - О бренде{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/about.css' %}">
+{% endblock %}
+{% block content %}
+    <section class="about-intro">
+        <div class="intro-container">
+            <div class="intro-text">
+                <p>Obnimi kids — это детская одежда из натуральных тканей свободного кроя. Наш бренд родился из большой любви и желания окружить каждого малыша заботой, красотой и комфортом.</p>
+            </div>
+            <div class="intro-image">
+                <img src="{% static 'main/images/brand.png' %}" alt="Ребёнок в одежде Obnimi Kids" class="about-img">
+            </div>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <h2>Наши принципы</h2>
+        <div class="philosophy-container">
+            <div class="philosophy-item">
+                <i class="fas fa-leaf"></i>
+                <h3>Естественность</h3>
+                <p>Мы любим природные оттенки и качественные материалы — лён, хлопок, футер.</p>
+            </div>
+            <div class="philosophy-item">
+                <i class="fas fa-running"></i>
+                <h3>Свобода</h3>
+                <p>Универсальный крой для игр, бега и исследования мира.</p>
+            </div>
+            <div class="philosophy-item">
+                <i class="fas fa-hand-sparkles"></i>
+                <h3>Ручная работа</h3>
+                <p>Шьём на заказ вручную в кратчайшие сроки.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission">
+        <div class="mission-container">
+            <div class="mission-image">
+                <img src="{% static 'main/images/brand1.png' %}" alt="Дети в свободной одежде" class="about-img">
+            </div>
+            <div class="mission-text">
+                <h2>Наша миссия</h2>
+                <p>В наших изделиях детям удобно бегать, играть и веселиться. Мы хотим стать частичкой тёплых детских воспоминаний, дарить свободу и лёгкость движений, чтобы вашему ребёнку ничего не мешало исследовать этот огромный мир.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="approach">
+        <h2>С заботой о вас</h2>
+        <div class="approach-container">
+            <p>Мы шьём одежду вручную на заказ и с радостью поможем вам с выбором размера и ткани. Каждая деталь создана, чтобы подарить комфорт и радость вашему малышу.</p>
+        </div>
+        <div class="approach-video">
+            <video class="about-video" autoplay loop muted playsinline>
+                <source src="{% static 'main/images/video.mp4' %}" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+OBNIMI Kids - Каталог
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="products">
+    <div class="products-header">
+        <h1 class="title">Каталог</h1>
+        <div class="decoration-line"></div>
+    </div>
+    <div class="catalog-controls">
+        <div class="search-bar">
+            <form method="GET" action="{% url 'catalog' %}" class="search-form">
+                <div class="search-wrapper">
+                    <input type="text" name="search" id="search-input" value="{{ search_query|default_if_none:'' }}" placeholder="Поиск по названию..." autocomplete="off">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                {% if selected_category %}
+                    <input type="hidden" name="category" value="{{ selected_category }}">
+                {% endif %}
+            </form>
+            <div class="suggestions" id="suggestions"></div>
+        </div>
+        <div class="category-filter">
+            <a href="{% url 'catalog' %}?{% if search_query %}search={{ search_query }}{% endif %}" class="category-btn {% if not selected_category %}active{% endif %}">Все</a>
+            {% for category_value, category_name in categories %}
+                <a href="{% url 'catalog' %}?category={{ category_value }}{% if search_query %}&search={{ search_query }}{% endif %}" class="category-btn {% if selected_category == category_value %}active{% endif %}">{{ category_name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="product-list">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.id %}" class="product-link">
+            <div class="product">
+                <div class="product-image-wrapper">
+                    {% if product.image %}
+                        <img src="{{ product.image }}" alt="{{ product.name }}" class="product-img crop-bottom">
+                    {% else %}
+                        <img src="{% static 'catalog/images/default.png' %}" alt="Default Image" class="product-img crop-bottom">
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <p class="product-name">{{ product.name }}</p>
+                    <p class="price">{{ product.price }} ₽</p>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p class="empty-message">Товаров не найдено. Попробуйте изменить запрос!</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'catalog/js/catalog.js' %}" defer></script>
+{% endblock %}

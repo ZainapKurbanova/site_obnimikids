@@ -1,0 +1,63 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}OBNIMI Kids - Оформление заказа{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'orders/css/checkout.css' %}">
+<link rel="stylesheet" href="{% static 'cart/css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="checkout-section">
+  <div class="checkout-container">
+    <h2>Оформление заказа</h2>
+
+    {% if messages %}
+    <div id="alert-messages" style="display: none;">
+      {% for message in messages %}
+      <div class="alert-message {{ message.tags }}" data-type="{% if 'успешно оформлен' in message %}order_success{% else %}cart_action{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    <div class="order-confirmation">
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
+      <a href="{% url 'profile' %}" class="continue-shopping-btn">Перейти в профиль</a>
+      <a href="{% url 'catalog' %}" class="continue-shopping-btn">Продолжить покупки</a>
+    </div>
+    {% else %}
+      {% if cart_items %}
+      <div class="order-summary">
+        <p>Товаров: {{ cart_items|length }}</p>
+        <p>Сумма: <span class="total-price">{{ total_price }} ₽</span></p>
+        <p>Доставка: <span id="delivery-cost">0 ₽</span></p>
+        <p>Итого: <span id="total-with-delivery">{{ total_price }} ₽</span></p>
+      </div>
+      <form method="post" action="{% url 'process_order' %}" id="checkout-form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}*{% endif %}</label>
+          {{ field }}
+          <div class="suggestions" id="{{ field.id_for_label }}-suggestions" style="display: none;"></div>
+          {% if field.errors %}
+          <p class="error">{{ field.errors }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="submit-btn">Подтвердить заказ</button>
+      </form>
+      <p class="delivery-note">Срок доставки зависит от выбранного способа.</p>
+      {% else %}
+      <p>Ваша корзина пуста. Добавьте товары перед оформлением заказа.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'cart/js/cart.js' %}" defer></script>
+<script src="{% static 'orders/js/checkout.js' %}" defer></script>
+{% endblock scripts %}

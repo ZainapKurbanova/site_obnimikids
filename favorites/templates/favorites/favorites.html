@@ -1,0 +1,40 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+OBNIMI Kids - Избранное
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="products">
+    <div class="products-header">
+        <h1 class="title">Избранное</h1>
+        <div class="decoration-line"></div>
+    </div>
+    <div class="product-list">
+        {% for favorite in favorites %}
+        <a href="{% url 'product_detail' favorite.product.id %}" class="product-link">
+            <div class="product">
+                <div class="product-image-wrapper">
+                    {% if favorite.product.image %}
+                        <img src="{{ favorite.product.image }}" alt="{{ favorite.product.name }}" class="product-img crop-bottom">
+                    {% else %}
+                        <img src="{% static 'catalog/images/default.png' %}" alt="Default Image" class="product-img crop-bottom">
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <p class="product-name">{{ favorite.product.name }}</p>
+                    <p class="price">{{ favorite.product.price }} ₽</p>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p class="favorite-empty" style="text-align: center;">Список избранного пуст. Добавьте товары!</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

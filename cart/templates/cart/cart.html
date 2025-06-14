@@ -1,0 +1,125 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}OBNIMI Kids - Корзина{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'cart/css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section class="cart-section">
+        <div class="cart-container">
+            <h2>Ваша корзина</h2>
+            <meta name="csrf-token" content="{{ csrf_token }}">
+            {% if cart_items %}
+                <div class="cart-items">
+                    {% for item in cart_items %}
+                        <div class="cart-item" data-item-id="{{ item.id }}">
+                            <div class="cart-item-image">
+                                <a href="{% url 'product_detail' item.product.id %}">
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                                    {% else %}
+                                        <img src="{% static 'catalog/images/default.png' %}" alt="Default Image">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="cart-item-info">
+                                <a href="{% url 'product_detail' item.product.id %}">
+                                    <h3>{{ item.product.name }}</h3>
+                                </a>
+                                <p>Размер: {{ item.size.name }}</p>
+                                <p>Цена: {{ item.product.price }} ₽</p>
+                                <p>Итого: <span class="item-total-price">{{ item.get_total_price }} ₽</span></p>
+                            </div>
+                            <div class="cart-item-actions">
+                                <div class="quantity-controls">
+                                    <button type="button" class="quantity-btn quantity-decrease" data-item-id="{{ item.id }}" data-change="-1">-</button>
+                                    <span class="quantity-value" data-item-id="{{ item.id }}">{{ item.quantity }}</span>
+                                    <button type="button" class="quantity-btn quantity-increase" data-item-id="{{ item.id }}" data-change="1">+</button>
+                                </div>
+                                <button class="remove-btn" data-item-id="{{ item.id }}">×</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="cart-summary">
+                    <div class="summary-details">
+                        <p>Состав заказа:</p>
+                        <p>Товаров: <span class="cart-item-count">{{ cart_items|length }}</span></p>
+                        <p>Итого: <span class="total-price">{{ total_price }} ₽</span></p>
+                    </div>
+                    <a href="{% url 'checkout' %}" class="checkout-btn">Оформить заказ</a>
+                </div>
+            {% else %}
+                <p class="empty-cart">Ваша корзина пуста.</p>
+            {% endif %}
+
+            <!-- Раздел "Также вам могут понравиться" в виде карусели -->
+            {% if suggested_products %}
+            <div class="recommendations-section">
+                <h3>Также вам могут понравиться</h3>
+                <div class="carousel-container">
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#10094;</button>
+                    <div class="recommendations-carousel">
+                        {% for product in suggested_products %}
+                        <div class="recommendation-item">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {% if product.image %}
+                                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <img src="{% static 'catalog/images/default.png' %}" alt="Default Image">
+                                {% endif %}
+                            </a>
+                            <h4>{{ product.name }}</h4>
+                            <p>{{ product.price }} ₽</p>
+                            <a href="{% url 'product_detail' product.id %}" class="view-btn">Посмотреть</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)">&#10095;</button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% block scripts %}
+        <script src="{% static 'cart/js/cart.js' %}" defer></script>
+        <script>
+            function moveCarousel(direction) {
+                const carousel = document.querySelector('.recommendations-carousel');
+                const items = carousel.querySelectorAll('.recommendation-item');
+                const itemWidth = items[0].offsetWidth + 20; // Ширина элемента + отступ
+                const visibleItems = 3; // Видно 3 товара
+                const maxScroll = (items.length - visibleItems) * itemWidth;
+
+                let currentScroll = carousel.scrollLeft;
+                let newScroll = currentScroll + (direction * itemWidth);
+
+                // Ограничиваем прокрутку
+                if (newScroll < 0) newScroll = 0;
+                if (newScroll > maxScroll) newScroll = maxScroll;
+
+                carousel.scrollTo({
+                    left: newScroll,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Инициализация: скрываем кнопки, если товаров меньше 4
+            document.addEventListener('DOMContentLoaded', () => {
+                const carousel = document.querySelector('.recommendations-carousel');
+                const items = carousel ? carousel.querySelectorAll('.recommendation-item') : [];
+                const prevBtn = document.querySelector('.carousel-btn.prev');
+                const nextBtn = document.querySelector('.carousel-btn.next');
+
+                if (items.length <= 3) {
+                    if (prevBtn) prevBtn.style.display = 'none';
+                    if (nextBtn) nextBtn.style.display = 'none';
+                }
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

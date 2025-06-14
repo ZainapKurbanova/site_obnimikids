@@ -1,0 +1,115 @@
+.admin-section {
+    padding: 100px 20px 60px;
+    min-height: 100vh;
+    background: #f0f2f5;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.admin-container {
+    max-width: 1000px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin: 0 auto;
+}
+
+.admin-container h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.messages .alert {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.messages .alert-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.messages .alert-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.orders-list {
+    margin-top: 30px;
+}
+
+.orders-list table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.orders-list th, .orders-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.orders-list th {
+    background: #f1f5f8;
+    color: #333333;
+    font-weight: 600;
+}
+
+.orders-list td {
+    color: #555555;
+}
+
+.orders-list .priority {
+    background: #fff3cd;
+    font-weight: 500;
+}
+
+.orders-list select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+select[name="status"] {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select[name="status"]:hover {
+    border-color: #888;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+select[name="status"]:focus {
+    border-color: #36A2EB;
+    box-shadow: 0 0 0 3px rgba(54, 162, 235, 0.2);
+}
+
+
+select[name="status"] option {
+    padding: 8px;
+    background-color: #fff;
+    color: #333;
+}
+
+form {
+    display: inline-block;
+}

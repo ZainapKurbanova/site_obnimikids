@@ -1,0 +1,237 @@
+/* Общие стили для секции */
+.checkout-section {
+    padding: 100px 20px 60px; /* Отступ сверху для навбара */
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f8f8f8 0%, #f0f4f7 50%, #e6f3e6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'Montserrat', sans-serif; /* Более современный и дружелюбный шрифт */
+}
+
+/* Контейнер формы */
+.checkout-container {
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff; /* Чистый белый фон для контраста */
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Мягкая тень */
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    margin: 0 auto;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Заголовок */
+.checkout-container h2 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333333; /* Тёмно-серый для читаемости */
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 0.3px;
+}
+
+/* Сводка заказа */
+.order-summary {
+    background: #f9fafb; /* Очень светлый серый фон */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 35px;
+    text-align: left;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.order-summary p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #555555;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-price {
+    font-weight: 700;
+    color: #5a7d5f; /* Мягкий зелёный для акцента */
+}
+
+/* Группа формы */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444444;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    background: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #333333;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #a3c2a7; /* Мягкий зелёный для фокуса */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Стили для radio-кнопок */
+.form-group input[type="radio"] {
+    display: none;
+}
+
+.form-group label[for^="id_delivery_method"] {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    background: #f1f5f8;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #555555;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="radio"]:checked + label {
+    background: #a3c2a7; /* Мягкий зелёный для выбранного состояния */
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Выпадающий список DaData */
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.suggestion-item:hover {
+    background: #f1f5f8; /* Светлый серый фон при наведении */
+}
+
+/* Ошибки */
+.form-group .error {
+    color: #e57373; /* Мягкий красный для ошибок */
+    font-size: 12px;
+    margin-top: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Кнопка отправки */
+.submit-btn {
+    width: 100%;
+    background: #78866b;
+    color: #ffffff;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Примечание о доставке */
+.delivery-note {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #777777;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Подтверждение заказа */
+.order-confirmation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.success-message {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #4caf50; /* Зелёный для успеха */
+    margin-bottom: 15px;
+}
+
+.order-confirmation p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #333333;
+}
+
+.continue-shopping-btn {
+    background: linear-gradient(90deg, #a3c2a7 0%, #8ab891 100%);
+    color: #ffffff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.continue-shopping-btn:hover {
+    background: linear-gradient(90deg, #8ab891 0%, #76a37d 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для пустой корзины */
+.checkout-container p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #777777;
+    text-align: center;
+    margin-top: 20px;
+}

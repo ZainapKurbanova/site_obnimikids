@@ -1,0 +1,151 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+    OBNIMI Kids - {{ product.name }}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'catalog/css/product_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'cart/css/cart.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+            {% if messages %}
+                <div id="alert-messages">
+                    {% for message in messages %}
+                        <div class="alert-message {{ message.tags }}"
+                             data-type="{% if 'успешно оформлен' in message %}order_success{% else %}cart_action{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="product-detail-grid">
+                <div class="product-image-container">
+                    <img src="{% if product.image %}{{ product.image }}{% else %}{% static 'catalog/images/default.png' %}{% endif %}"
+                         alt="{{ product.name }}"
+                         class="product-detail-image"
+                         id="product-image">
+                </div>
+                <div class="product-info">
+                    <h2>{{ product.name }} ({{ product.color }})</h2>
+                    <div class="rating-container">
+                        <span class="average-rating">
+                            {% if product.average_rating > 0 %}
+                                {{ product.average_rating }} <i class="fas fa-star"></i>
+                            {% else %}
+                                Нет отзывов
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="price-container">
+                        {% if product.old_price %}
+                            <p class="old-price">{{ product.old_price }} ₽</p>
+                            <p class="price">{{ product.price }} ₽</p>
+                        {% else %}
+                            <p class="price">{{ product.price }} ₽</p>
+                        {% endif %}
+                    </div>
+                    <form id="add-to-cart-form" class="add-to-cart-form" data-product-id="{{ product.id }}" data-cart-url="{% url 'cart' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="color" value="{{ product.color }}">
+                        <div class="size-selector">
+                            <p>Размеры:</p>
+                            <div class="size-buttons">
+                                {% for size in product.sizes.all %}
+                                    <input type="radio" id="size_{{ size.name }}" name="size" value="{{ size.name }}" required>
+                                    <label for="size_{{ size.name }}" class="size-btn">{{ size.name }}</label>
+                                {% empty %}
+                                    <p>Размеры отсутствуют</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="quantity-selector">
+                            <p>Количество:</p>
+                            <div class="quantity-controls">
+                                <button type="button" class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" readonly>
+                                <button type="button" class="quantity-btn" onclick="updateQuantity(1)">+</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-to-cart-btn" class="add-to-cart-btn">Добавить в корзину</button>
+                        <button type="button" class="favorite-btn" id="favorite-btn" data-product-id="{{ product.id }}">
+                            {% if is_favorite %}
+                                <i class="fas fa-heart"></i> Удалить из избранного
+                            {% else %}
+                                <i class="far fa-heart"></i> Добавить в избранное
+                            {% endif %}
+                        </button>
+                        <button type="button" class="more-details-btn" onclick="toggleDetails()">Подробнее</button>
+                    </form>
+                    <div class="details-content" id="details-content" style="display: none;">
+                        <p>{{ product.description|linebreaksbr }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Секция отзывов -->
+            <div class="reviews-section">
+                <h3>Отзывы</h3>
+                {% if product.reviews.all %}
+                    {% for review in product.reviews.all %}
+                        <div class="review">
+                            <div class="review-header">
+                                <span class="review-user">{{ review.user.username }}</span>
+                                <span class="review-rating">
+                                    {% for i in "12345" %}
+                                        <i class="fas fa-star {% if forloop.counter <= review.rating %}filled{% endif %}"></i>
+                                    {% endfor %}
+                                </span>
+                                <span class="review-date">{{ review.created_at|date:"d.m.Y" }}</span>
+                            </div>
+                            <p class="review-comment">{{ review.comment|linebreaksbr }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-reviews">Пока нет отзывов. Будьте первым, кто оставит отзыв!</p>
+                {% endif %}
+
+                <!-- Форма добавления отзыва -->
+                {% if user.is_authenticated %}
+                    {% if can_review %}
+                        <form method="post" class="review-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="add_review" value="1">
+                            <h4>Оставить отзыв</h4>
+                            <div class="rating-selector">
+                                <p>Ваша оценка:</p>
+                                <div class="stars">
+                                    {% for i in "54321" %}
+                                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                                        <label for="star{{ i }}" class="star"><i class="fas fa-star"></i></label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="comment-field">
+                                <textarea name="comment" placeholder="Напишите ваш отзыв..." required></textarea>
+                            </div>
+                            <button type="submit" class="submit-review-btn">Отправить отзыв</button>
+                        </form>
+                    {% elif has_reviewed %}
+                        <p class="review-message">Вы уже оставили отзыв на этот товар.</p>
+                    {% else %}
+                        <p class="review-message">Вы можете оставить отзыв после покупки и доставки товара.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="review-message">Войдите в аккаунт, чтобы оставить отзыв.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'catalog/js/product_detail.js' %}" defer></script>
+    <script src="{% static 'cart/js/cart.js' %}" defer></script>
+{% endblock %}

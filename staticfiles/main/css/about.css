@@ -1,0 +1,282 @@
+.about-img {
+    margin-top: 100px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease;
+}
+
+.about-img:hover {
+    transform: scale(1.05);
+}
+
+.about-video {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Вступление */
+.about-intro {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.intro-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.intro-text {
+    flex: 1;
+    text-align: left;
+    max-width: 500px;
+}
+
+.intro-text p {
+    font-size: 18px;
+    color: #666;
+}
+
+.intro-image {
+    flex: 1;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Философия */
+.philosophy {
+    padding: 60px 20px;
+    background: #ffffff;
+}
+
+.philosophy h2 {
+    font-size: 32px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.philosophy h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    background: #78866b;
+    transform: translateX(-50%);
+}
+
+.philosophy-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.philosophy-item {
+    background: #f0f4f7;
+    padding: 25px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.4s ease;
+}
+
+.philosophy-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.philosophy-item i {
+    font-size: 36px;
+    color: #78866b;
+    margin-bottom: 15px;
+}
+
+.philosophy-item h3 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.philosophy-item p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Миссия */
+.mission {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mission-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mission-image {
+    flex: 1;
+    max-width: 400px;
+    text-align: center;
+}
+
+.mission-text {
+    flex: 1;
+    text-align: left;
+    max-width: 500px;
+}
+
+.mission-text h2 {
+    font-size: 32px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mission-text h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: #78866b;
+}
+
+.mission-text p {
+    font-size: 18px;
+    color: #666;
+}
+
+/* Подход */
+.approach {
+    padding: 60px 20px;
+    background: #ffffff;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.approach h2 {
+    font-size: 32px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.approach h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    background: #78866b;
+    transform: translateX(-50%);
+}
+
+.approach-container {
+    margin-bottom: 40px;
+}
+
+.approach-container p {
+    font-size: 18px;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.approach-video {
+    text-align: center;
+}
+/* Адаптивность */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 5px 0;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .about-header {
+        height: 300px; /* Уменьшаем высоту на мобильных */
+    }
+
+    .intro-container, .mission-container {
+        flex-direction: column;
+        padding: 40px 10px;
+    }
+
+    .intro-text, .mission-text {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .intro-text h2::after, .mission-text h2::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .intro-image, .mission-image {
+        max-width: 100%;
+    }
+
+    .about-img, .about-video {
+        max-width: 300px;
+    }
+
+    .philosophy {
+        padding: 40px 10px;
+    }
+
+    .philosophy-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .philosophy-item {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .approach {
+        padding: 40px 10px;
+    }
+
+    .contact {
+        padding: 30px 10px;
+    }
+
+    .contact h2 {
+        font-size: 22px;
+    }
+}

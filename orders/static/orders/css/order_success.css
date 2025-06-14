@@ -1,0 +1,60 @@
+.order-success-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.order-success-card {
+  background-color: #f2f5f1;
+  border: 2px solid #c3ccc0;
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(108, 118, 99, 0.15);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.order-success-card h2 {
+  color: #6c7663;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.order-success-card p {
+  color: #444;
+  font-size: 16px;
+  margin: 12px 0;
+}
+
+.telegram-btn {
+  display: inline-block;
+  background-color: #6c7663;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 32px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 16px 0;
+  transition: background-color 0.3s ease;
+}
+
+.telegram-btn:hover {
+  background-color: #5c6454;
+}
+
+.profile-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #6c7663;
+  font-weight: 500;
+  text-decoration: underline;
+  font-size: 15px;
+}
+
+.small-note {
+  font-size: 14px;
+  color: #5e6558;
+  margin-top: 8px;
+}

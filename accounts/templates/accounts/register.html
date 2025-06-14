@@ -1,0 +1,32 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}OBNIMI Kids - Регистрация{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section class="auth-section">
+        <div class="auth-container">
+            <h2>Регистрация</h2>
+            <form class="auth-form" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="auth-btn">Зарегистрироваться</button>
+                <p class="auth-link">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+            </form>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,218 @@
+header {
+    background: none;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    height: 600px;
+}
+
+header .logo {
+    display: block;
+    text-align: center;
+}
+
+header .logo img {
+    margin-top: 60px;
+    width: 100%;
+    height: auto;
+}
+
+.intro {
+    font-family: 'Raleway', 'Montserrat', Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: rgba(51, 51, 51, 0.95);
+    text-align: center;
+    line-height: 1.6;
+    margin: 0 300px;
+    max-width: 900px;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(3px);
+    position: relative;
+    top: 0;
+    margin-top: -200px;
+    margin-bottom: 15px;
+}
+
+.products {
+    background: #ffffff;
+    padding: 60px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.products h2 {
+    color: #444;
+    font-family: 'Raleway', 'Montserrat', Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.products h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    background: #78866b;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.products h2:hover::after {
+    width: 80px;
+}
+
+.product-list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.product {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    font-family: 'Raleway', 'Montserrat', Arial, sans-serif;
+    width: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.product img {
+    max-width: 100%;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.product img:hover {
+    opacity: 0.9;
+}
+
+.product p {
+    font-size: 18px;
+    color: #444;
+    margin: 15px 0 10px;
+    font-weight: 400;
+}
+
+.catalog-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 14px 30px;
+    background: linear-gradient(45deg, #78866b, #5c6d50);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: 'Raleway', 'Montserrat', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    border: 2px solid #78866b;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.catalog-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: width 0.4s ease;
+}
+
+.catalog-btn:hover {
+    background: linear-gradient(45deg, #5c6d50, #4a5a40);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(120, 134, 107, 0.3);
+}
+
+.catalog-btn:hover::before {
+    width: 100%;
+}
+
+.catalog-btn i {
+    transition: transform 0.3s ease;
+}
+
+.catalog-btn:hover i {
+    transform: scale(1.1);
+}
+.content {
+    padding-top: 0px;
+}
+/* Адаптивность */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 5px 0;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .intro {
+        font-size: 18px;
+        padding: 20px;
+        max-width: 85%;
+    }
+
+    .products {
+        padding: 40px 10px;
+    }
+
+    .product {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .products h2 {
+        font-size: 24px;
+    }
+
+    .catalog-btn {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+
+    .contact {
+        padding: 30px 10px;
+    }
+
+    .contact h2 {
+        font-size: 22px;
+    }
+
+    .logo-icon {
+        font-size: 18px;
+    }
+}
