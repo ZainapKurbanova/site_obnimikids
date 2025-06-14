@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: site-obnimikids
+    runtime: python
+    pythonVersion: 3.11.9
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python manage.py runbot"
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        fromEnvVar: TELEGRAM_BOT_TOKEN
+      - key: TELEGRAM_ADMIN_CHAT_IDS
+        fromEnvVar: TELEGRAM_ADMIN_CHAT_IDS
+      - key: DATABASE_URL
+        fromEnvVar: DATABASE_URL
