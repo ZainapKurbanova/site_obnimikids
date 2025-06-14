@@ -1,10 +1,8 @@
 services:
   - type: web
     name: obnimikids-bot
-    runtime: python
-    buildCommand: |
-      echo "python-3.11.11" > runtime.txt
-      pip install -r requirements.txt
+    runtime: python-3.12
+    buildCommand: pip install -r requirements.txt
     startCommand: python manage.py runbot
     envVars:
       - key: TELEGRAM_BOT_TOKEN
