@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from telegram import Update
 from telegram.ext import Application, ContextTypes
-from telegram_bot.handlers import setup_handlers  # см. пункт 2
 
 from asgiref.sync import sync_to_async
 
