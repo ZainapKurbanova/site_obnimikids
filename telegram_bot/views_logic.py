@@ -1,5 +1,8 @@
 import logging
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from telegram import (
+    Update, InlineKeyboardMarkup, InlineKeyboardButton,
+    ReplyKeyboardMarkup, KeyboardButton
+)
 from telegram.ext import ContextTypes
 from asgiref.sync import sync_to_async
 
@@ -8,13 +11,17 @@ from orders.models import Order
 
 logger = logging.getLogger(__name__)
 
+ADMINS = [509241742]
+admin_reply_sessions = {}
+
+
 # Главное меню
 def main_menu():
     return ReplyKeyboardMarkup([
         [KeyboardButton("❓ Задать вопрос"), KeyboardButton("📦 Статус заказа")]
     ], resize_keyboard=True)
 
-# Создание или получение пользователя
+
 @sync_to_async
 def create_or_get_user(chat_id, first_name, last_name, username):
     return TelegramUser.objects.get_or_create(
@@ -26,12 +33,34 @@ def create_or_get_user(chat_id, first_name, last_name, username):
         }
     )
 
-# Получение заказа по ID (с безопасной предзагрузкой)
+
 @sync_to_async
 def get_order_with_items(order_id):
     return Order.objects.select_related('user').prefetch_related('items__product').get(id=order_id)
 
-# Обработчик команды /start
+
+@sync_to_async
+def save_order_chat_id(order, chat_id):
+    order.tg_chat_id = chat_id
+    order.save(update_fields=["tg_chat_id"])
+
+
+@sync_to_async
+def get_latest_order_by_chat_id(chat_id):
+    return Order.objects.filter(tg_chat_id=chat_id).latest("created_at")
+
+
+@sync_to_async
+def mark_order_paid(order):
+    order.status = 'paid'
+    order.save(update_fields=["status"])
+
+
+@sync_to_async
+def get_first_order_item(order):
+    return order.items.first()
+
+
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
@@ -39,7 +68,6 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     logger.info(f"📥 Старт команды. chat_id={chat_id}, args={args}")
 
-    # Создаём пользователя
     await create_or_get_user(
         chat_id=chat_id,
         first_name=user.first_name,
@@ -47,19 +75,16 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         username=user.username
     )
 
-    # Проверяем, пришёл ли заказ
     if args and args[0].startswith("order_"):
         order_id = args[0].split("_")[1]
         try:
             order = await get_order_with_items(order_id)
-            order.tg_chat_id = chat_id
-            await sync_to_async(order.save)(update_fields=["tg_chat_id"])
+            await save_order_chat_id(order, chat_id)
 
-            item = order.items.first()
+            item = await get_first_order_item(order)
             product = item.product.name if item else "Товар"
             quantity = item.quantity if item else 1
 
-            # Кнопки подтверждения
             keyboard = InlineKeyboardMarkup([
                 [InlineKeyboardButton("Да, оплатить", callback_data=f"pay_{order_id}"),
                  InlineKeyboardButton("Нет", callback_data="cancel_order")]
@@ -78,19 +103,46 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 ),
                 reply_markup=keyboard
             )
-
         except Order.DoesNotExist:
             await context.bot.send_message(chat_id=chat_id, text="❌ Заказ не найден.")
         except Exception as e:
             logger.exception("Ошибка при обработке заказа:")
             await context.bot.send_message(chat_id=chat_id, text="❌ Произошла ошибка при обработке заказа.")
 
-    # Показываем меню
     await context.bot.send_message(
         chat_id=chat_id,
         text="📍 Используйте меню ниже для работы с ботом:",
         reply_markup=main_menu()
     )
+
+
+async def handle_pay_request(context, chat_id, order_id):
+    try:
+        order = await get_order_with_items(order_id)
+        order.status = "pending"
+        await sync_to_async(order.save)(update_fields=["status"])
+
+        for admin_id in ADMINS:
+            keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton("✉️ Ответить клиенту", callback_data=f"reply_to_{chat_id}")],
+                [InlineKeyboardButton("✅ Пометить как оплачено", callback_data=f"mark_paid_{chat_id}")]
+            ])
+            await context.bot.send_message(
+                chat_id=admin_id,
+                text=(
+                    f"💳 Новый запрос на оплату заказа №{order.id} от @{order.user.username or 'Без имени'} "
+                    f"(chat_id: {chat_id}).\n\n💬 Скоро пришлю ссылку на оплату. Пожалуйста, ожидайте."
+                ),
+                reply_markup=keyboard
+            )
+
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text="💬 Скоро пришлю ссылку на оплату. Пожалуйста, ожидайте."
+        )
+    except Order.DoesNotExist:
+        await context.bot.send_message(chat_id=chat_id, text="❌ Заказ не найден.")
+
 
 async def callback_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -110,9 +162,8 @@ async def callback_query_handler(update: Update, context: ContextTypes.DEFAULT_T
     elif data.startswith("mark_paid_"):
         client_chat_id = data.split("_")[-1]
         try:
-            order = Order.objects.filter(tg_chat_id=client_chat_id).latest('created_at')
-            order.status = 'paid'
-            order.save(update_fields=['status'])
+            order = await get_latest_order_by_chat_id(client_chat_id)
+            await mark_order_paid(order)
             await context.bot.send_message(chat_id=client_chat_id, text="✅ Спасибо за оплату! Мы скоро отправим ваш заказ.")
             await context.bot.send_message(chat_id=chat_id, text="Статус заказа обновлён как 'Оплачено'.")
         except Order.DoesNotExist:
@@ -121,6 +172,7 @@ async def callback_query_handler(update: Update, context: ContextTypes.DEFAULT_T
     elif data == "cancel_order":
         await context.bot.send_message(chat_id=chat_id, text="❌ Заказ отменён. Вы можете связаться с нами, если хотите внести изменения.")
 
+
 async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     text = update.message.text
@@ -128,31 +180,38 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if text == "❓ Задать вопрос":
         await context.bot.send_message(chat_id=chat_id, text="✍ Напишите ваш вопрос, мы скоро ответим.")
         context.user_data["awaiting_question"] = True
+
     elif text == "📦 Статус заказа":
         await context.bot.send_message(chat_id=chat_id, text="📮 Укажите номер заказа.")
         context.user_data["awaiting_order_id"] = True
+
     elif context.user_data.get("awaiting_question"):
         for admin_id in ADMINS:
             await context.bot.send_message(chat_id=admin_id, text=f"📩 Вопрос от клиента (chat_id: {chat_id}):\n{text}")
         await context.bot.send_message(chat_id=chat_id, text="✅ Вопрос передан. Мы скоро ответим.")
         context.user_data["awaiting_question"] = False
+
     elif context.user_data.get("awaiting_order_id"):
         for admin_id in ADMINS:
             await context.bot.send_message(chat_id=admin_id, text=f"📦 Запрос статуса от chat_id {chat_id}:\n{text}")
         await context.bot.send_message(chat_id=chat_id, text="✅ Запрос принят.")
         context.user_data["awaiting_order_id"] = False
+
     elif chat_id in admin_reply_sessions:
         target_chat_id = admin_reply_sessions.pop(chat_id)
         await context.bot.send_message(chat_id=target_chat_id, text=f"📨 Администратор:\n{text}")
         await context.bot.send_message(chat_id=chat_id, text="✅ Ответ отправлен.")
+
     else:
         for admin_id in ADMINS:
             await context.bot.send_message(chat_id=admin_id, text=f"📩 Сообщение от клиента (chat_id: {chat_id}):\n{text}")
         await context.bot.send_message(chat_id=chat_id, text="Ваше сообщение получено.")
 
+
 async def media_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     message = update.message
+
     if message.photo or message.document:
         for admin_id in ADMINS:
             await context.bot.forward_message(chat_id=admin_id, from_chat_id=chat_id, message_id=message.message_id)
