@@ -1,28 +1,22 @@
 import logging
-from telegram import (
-    Update,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    KeyboardButton,
-    ReplyKeyboardMarkup,
-)
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import ContextTypes
+from asgiref.sync import sync_to_async
 
 from telegram_bot.models import TelegramUser
 from orders.models import Order
-from asgiref.sync import sync_to_async
+
 logger = logging.getLogger(__name__)
 
-ADMINS = [509241742]
-admin_reply_sessions = {}
-
+# Главное меню
 def main_menu():
     return ReplyKeyboardMarkup([
         [KeyboardButton("❓ Задать вопрос"), KeyboardButton("📦 Статус заказа")]
     ], resize_keyboard=True)
-    
+
+# Создание или получение пользователя
 @sync_to_async
-def create_telegram_user(chat_id, first_name, last_name, username):
+def create_or_get_user(chat_id, first_name, last_name, username):
     return TelegramUser.objects.get_or_create(
         chat_id=chat_id,
         defaults={
@@ -31,25 +25,41 @@ def create_telegram_user(chat_id, first_name, last_name, username):
             "username": username,
         }
     )
+
+# Получение заказа по ID (с безопасной предзагрузкой)
+@sync_to_async
+def get_order_with_items(order_id):
+    return Order.objects.select_related('user').prefetch_related('items__product').get(id=order_id)
+
+# Обработчик команды /start
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
-    start_payload = context.args[0] if context.args else ''
+    args = context.args
 
-    await create_telegram_user(
+    logger.info(f"📥 Старт команды. chat_id={chat_id}, args={args}")
+
+    # Создаём пользователя
+    await create_or_get_user(
         chat_id=chat_id,
         first_name=user.first_name,
         last_name=user.last_name,
         username=user.username
     )
 
-    if start_payload.startswith("order_"):
-        order_id = start_payload.split("_")[1]
+    # Проверяем, пришёл ли заказ
+    if args and args[0].startswith("order_"):
+        order_id = args[0].split("_")[1]
         try:
-            order = Order.objects.get(id=order_id)
+            order = await get_order_with_items(order_id)
             order.tg_chat_id = chat_id
-            order.save(update_fields=['tg_chat_id'])
+            await sync_to_async(order.save)(update_fields=["tg_chat_id"])
 
+            item = order.items.first()
+            product = item.product.name if item else "Товар"
+            quantity = item.quantity if item else 1
+
+            # Кнопки подтверждения
             keyboard = InlineKeyboardMarkup([
                 [InlineKeyboardButton("Да, оплатить", callback_data=f"pay_{order_id}"),
                  InlineKeyboardButton("Нет", callback_data="cancel_order")]
@@ -57,51 +67,30 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             await context.bot.send_message(
                 chat_id=chat_id,
-                text=f"Ваш заказ №{order.id} успешно создан!\n\n"
-                     f"Товар: {order.items.first().product.name} × {order.items.first().quantity}\n"
-                     f"Адрес доставки: {order.city}, {order.address_detail}\n"
-                     f"Доставка: {order.delivery_cost} ₽\n"
-                     f"Сумма: {order.total_price} ₽\n"
-                     f"Итого: {order.get_total_with_delivery()} ₽\n\n"
-                     f"Всё ли корректно?",
+                text=(
+                    f"Ваш заказ №{order.id} успешно создан!\n\n"
+                    f"Товар: {product} × {quantity}\n"
+                    f"Адрес доставки: {order.city}, {order.address_detail}\n"
+                    f"Доставка: {order.delivery_cost} ₽\n"
+                    f"Сумма: {order.total_price} ₽\n"
+                    f"Итого: {order.get_total_with_delivery()} ₽\n\n"
+                    f"Всё ли корректно?"
+                ),
                 reply_markup=keyboard
             )
+
         except Order.DoesNotExist:
             await context.bot.send_message(chat_id=chat_id, text="❌ Заказ не найден.")
+        except Exception as e:
+            logger.exception("Ошибка при обработке заказа:")
+            await context.bot.send_message(chat_id=chat_id, text="❌ Произошла ошибка при обработке заказа.")
 
+    # Показываем меню
     await context.bot.send_message(
         chat_id=chat_id,
         text="📍 Используйте меню ниже для работы с ботом:",
         reply_markup=main_menu()
     )
-
-async def handle_pay_request(context, chat_id, order_id):
-    try:
-        order = Order.objects.get(id=order_id)
-        order.status = 'pending'
-        order.save(update_fields=['status'])
-
-        for admin_id in ADMINS:
-            keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("✉️ Ответить клиенту", callback_data=f"reply_to_{chat_id}")],
-                [InlineKeyboardButton("✅ Пометить как оплачено", callback_data=f"mark_paid_{chat_id}")]
-            ])
-            await context.bot.send_message(
-                chat_id=admin_id,
-                text=(
-                    f"💳 Новый запрос на оплату заказа №{order.id} от @{order.user.username or 'Без имени'} "
-                    f"(chat_id: {chat_id}).\n\n💬 Скоро пришлю ссылку на оплату. Пожалуйста, ожидайте."
-                ),
-                reply_markup=keyboard
-            )
-
-        await context.bot.send_message(
-            chat_id=chat_id,
-            text="💬 Скоро пришлю ссылку на оплату. Пожалуйста, ожидайте."
-        )
-
-    except Order.DoesNotExist:
-        await context.bot.send_message(chat_id=chat_id, text="❌ Заказ не найден.")
 
 async def callback_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
