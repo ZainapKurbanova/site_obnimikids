@@ -10,7 +10,7 @@ from telegram.ext import ContextTypes
 
 from telegram_bot.models import TelegramUser
 from orders.models import Order
-
+from asgiref.sync import sync_to_async
 logger = logging.getLogger(__name__)
 
 ADMINS = [509241742]
@@ -20,19 +20,27 @@ def main_menu():
     return ReplyKeyboardMarkup([
         [KeyboardButton("❓ Задать вопрос"), KeyboardButton("📦 Статус заказа")]
     ], resize_keyboard=True)
-
+    
+@sync_to_async
+def create_telegram_user(chat_id, first_name, last_name, username):
+    return TelegramUser.objects.get_or_create(
+        chat_id=chat_id,
+        defaults={
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+        }
+    )
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
     start_payload = context.args[0] if context.args else ''
 
-    TelegramUser.objects.get_or_create(
+    await create_telegram_user(
         chat_id=chat_id,
-        defaults={
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "username": user.username,
-        }
+        first_name=user.first_name,
+        last_name=user.last_name,
+        username=user.username
     )
 
     if start_payload.startswith("order_"):
