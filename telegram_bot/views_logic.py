@@ -60,6 +60,15 @@ def mark_order_paid(order):
 def get_first_order_item(order):
     return order.items.first()
 
+@sync_to_async
+def get_order_product_info(order):
+    try:
+        item = order.items.select_related("product").first()
+        if item and item.product:
+            return item.product.name, item.quantity
+    except Exception as e:
+        logger.exception(f"Ошибка при получении информации о товаре: {e}")
+    return "Товар", 1
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -81,9 +90,7 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             order = await get_order_with_items(order_id)
             await save_order_chat_id(order, chat_id)
 
-            item = await get_first_order_item(order)
-            product = item.product.name if item else "Товар"
-            quantity = item.quantity if item else 1
+            product, quantity = await get_order_product_info(order)
 
             keyboard = InlineKeyboardMarkup([
                 [InlineKeyboardButton("Да, оплатить", callback_data=f"pay_{order_id}"),
