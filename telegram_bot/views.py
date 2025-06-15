@@ -19,10 +19,7 @@ async def telegram_webhook(request):
         try:
             data = request.body.decode("utf-8")
             update = Update.de_json(json.loads(data), application.bot)
-
-            if not application.ready:
-                await application.initialize()
-
+            await application.initialize()
             await application.process_update(update)
             return JsonResponse({"ok": True})
         except Exception as e:
