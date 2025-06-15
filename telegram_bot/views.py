@@ -26,10 +26,14 @@ async def telegram_webhook(request):
             data = json.loads(request.body.decode("utf-8"))
             update = Update.de_json(data, application.bot)
 
-            # Добавляем обновление в очередь приложения
+            if not application.running:
+                await application.initialize()
+                await application.start()
+
             await application.update_queue.put(update)
             return JsonResponse({"ok": True})
         except Exception as e:
             logger.exception("Ошибка в webhook:")
             return JsonResponse({"ok": False, "error": str(e)}, status=400)
     return JsonResponse({"ok": True})
+
