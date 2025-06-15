@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from telegram import Update
 from telegram.ext import Application
 from telegram_bot.handlers import setup_handlers
+import json
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 application = Application.builder().token(BOT_TOKEN).build()
@@ -17,7 +18,7 @@ async def telegram_webhook(request):
     if request.method == "POST":
         try:
             data = request.body.decode("utf-8")
-            update = Update.de_json(eval(data), application.bot)
+            update = Update.de_json(json.loads(data), application.bot)
 
             if not application.ready:
                 await application.initialize()
