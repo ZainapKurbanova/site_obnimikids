@@ -9,31 +9,32 @@ from telegram_bot.handlers import setup_handlers
 
 logger = logging.getLogger(__name__)
 
-# Инициализация приложения
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 application = Application.builder().token(BOT_TOKEN).build()
 setup_handlers(application)
 
-# Запуск приложения в фоне
-import asyncio
-asyncio.get_event_loop().create_task(application.initialize())
-asyncio.get_event_loop().create_task(application.start())
+# Флаг, чтобы инициализировать только один раз
+application_ready = False
 
 @csrf_exempt
 async def telegram_webhook(request):
+    global application_ready
+
     if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
             update = Update.de_json(data, application.bot)
 
-            if not application.running:
+            # Однократная инициализация и запуск
+            if not application_ready:
                 await application.initialize()
                 await application.start()
+                application_ready = True
 
             await application.update_queue.put(update)
             return JsonResponse({"ok": True})
         except Exception as e:
             logger.exception("Ошибка в webhook:")
             return JsonResponse({"ok": False, "error": str(e)}, status=400)
-    return JsonResponse({"ok": True})
 
+    return JsonResponse({"ok": True})
