@@ -2,18 +2,14 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
+import psycopg2
 
-# Build paths inside the project like this: BASE_DIR / "subdir".
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-xfgn(50^dhqt#m@6e-v@3j9q$squgmvf2)i%e-z0i!p^f@^wb&')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Исправлено: строка 'True' заменена на булево значение True
+DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,obnimikids.onrender.com,obnimikids.ru,www.obnimikids.ru').split(',')
 
@@ -67,7 +63,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'obnimikids.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DBNAME'),
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
+        'HOST': config('HOST'),
+        'PORT': config('PORT'),
+    }
 }
 
 LOGGING = {
