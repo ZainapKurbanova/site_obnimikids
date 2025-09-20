@@ -7,7 +7,7 @@ import psycopg2
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-xfgn(50^dhqt#m@6e-v@3j9q$squgmvf2)i%e-z0i!p^f@^wb&')
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
